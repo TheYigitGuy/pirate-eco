@@ -17,14 +17,14 @@ module.exports = {
         await db.ensure(`${message.author.id}-wstreak`, 0)
         const _currentBal = await db.get(`${message.author.id}-bal`)
         const _streak = await db.get(`${message.author.id}-wstreak`)
-        const newBal = _currentBal + (500 * _streak)
+        const newBal = _currentBal + (500 * (_streak + 1))
         await db.set(`${message.author.id}-bal`, newBal)
         if(_streak < 5)await db.inc(`${message.author.id}-wstreak`)
-        cooldowndb.set(`${message.author.id}-weekly`, Date.now() + ms("1d"))
+        cooldowndb.set(`${message.author.id}-weekly`, Date.now() + ms("1w"))
 
         return message.channel.send(new DiscordJS.MessageEmbed()
         .setColor("RANDOM")
-        .setDescription(piratish.translate(`You succesfuly claimed ${500 * _streak} money as your weekly reward! \n You're on a Weekly Streak of ${db.get(`${message.author.id}-wstreak`)}! \n Your new amount of money is ${newBal}\n See your money using ${prefix}loot`))
+        .setDescription(piratish.translate(`You succesfuly claimed ${500 * (_streak + 1)} money as your weekly reward! \n You're on a Weekly Streak of ${db.get(`${message.author.id}-wstreak`)}! \n Your new amount of money is ${newBal}\n See your money using ${prefix}loot`))
         .setTitle(piratish.translate(`✅ Good Job`))
         )
     }

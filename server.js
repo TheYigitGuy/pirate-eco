@@ -1,9 +1,10 @@
 const DiscordJS = require("discord.js");
-const {prefix,token,owners} = require("./config.json");
+const {prefix,token} = require("./config.json");
 const client = new DiscordJS.Client();
 const enmap = require("enmap");
 const fs = require("fs");
 const pirateSpeak = require("pirate-speak");
+const owners = ["750802821900664864"]
 
 client.commands = new DiscordJS.Collection();
 client.events = new DiscordJS.Collection();
@@ -15,6 +16,7 @@ const cmdFiles = fs.readdirSync("./commands/").filter(file => file.endsWith(".js
 for(const file of cmdFiles) {
     const command = require(`./commands/${file}`);
     if(!client.commandCategories.has(command.category)) client.commandCategories.set(command.category, command.category);
+    console.log(`Registering command : ${command.name}`)
     client.commands.set(command.name, command);
 }
 
@@ -48,6 +50,7 @@ fs.readdir('./events', (err, files) => {
         const event = require(`./events/${file}`);
         const eventName = file.split(".")[0];
         client.on(eventName, event.bind(null, client));
+        console.log(`Registering event : ${eventName}`)
         delete require.cache[require.resolve(`./events/${file}`)]
     })
 })

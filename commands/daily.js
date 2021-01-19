@@ -17,14 +17,14 @@ module.exports = {
         await db.ensure(`${message.author.id}-dstreak`, 0)
         const _currentBal = await db.get(`${message.author.id}-bal`)
         const _streak = await db.get(`${message.author.id}-dstreak`)
-        const newBal = _currentBal + (50 * _streak)
+        const newBal = _currentBal + (50 * (_streak + 1))
         await db.set(`${message.author.id}-bal`, newBal)
         await db.inc(`${message.author.id}-dstreak`)
         cooldowndb.set(`${message.author.id}-daily`, Date.now() + ms("1d"))
 
         return message.channel.send(new DiscordJS.MessageEmbed()
         .setColor("RANDOM")
-        .setDescription(piratish.translate(`You succesfuly claimed ${newBal} money as your daily reward! \n You're on a Daily Streak of ${`${message.author.id}-dstreak`}! \n Your new amount of money is ${newBal}\n See your money using ${prefix}loot`))
+        .setDescription(piratish.translate(`You succesfuly claimed ${50 * (_streak + 1)} money as your daily reward! \n You're on a Daily Streak of ${db.get(`${message.author.id}-dstreak`)}! \n Your new amount of money is ${newBal}\n See your money using ${prefix}loot`))
         .setTitle(piratish.translate(`✅ Good Job`))
         )
     }

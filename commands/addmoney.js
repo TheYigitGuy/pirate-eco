@@ -6,7 +6,7 @@ module.exports = {
     description: "Add Money to Someone or yourself! <OWNER ONLY>",
     aliases: ["addm", "amoney"],
     category: "Economy-Owner",
-    ownerOnly: true,
+    ownersOnly: true,
     run: async(message,args,client,db) => {
         const targetID = message.mentions.members.first() || message.author;
         await db.ensure(`${targetID.id}-bal`, 0)
