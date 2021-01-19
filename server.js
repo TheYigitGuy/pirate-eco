@@ -6,11 +6,20 @@ const fs = require("fs");
 
 client.commands = new DiscordJS.Collection();
 client.events = new DiscordJS.Collection();
+client.shop = new DiscordJS.Collection();
+client.shopCategories = new DiscordJS.Collection();
 
 const cmdFiles = fs.readdirSync("./commands/").filter(file => file.endsWith(".js"));
 for(const file of cmdFiles) {
     const command = require(`./commands/${file}`);
     client.commands.set(command.name, command);
+}
+
+const shopItems = fs.readdirSync("./shop/").filter(file => file.endsWith(".js"));
+for(const _item of shopItems) {
+    const item = require(`./shop/${_item}`);
+    client.shop.set(item.id, item);
+    if(!client.shopCategories.has(item.category)) client.shopCategories.set(item.category, item.category);
 }
 
 const eco = new enmap({
@@ -34,7 +43,6 @@ fs.readdir('./events', (err, files) => {
         if(!file.endsWith(".js")) return;
         const event = require(`./events/${file}`);
         const eventName = file.split(".")[0];
-
         client.on(eventName, event.bind(null, client));
         delete require.cache[require.resolve(`./events/${file}`)]
     })
