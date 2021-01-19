@@ -19,6 +19,7 @@ const shopItems = fs.readdirSync("./shop/").filter(file => file.endsWith(".js"))
 for(const _item of shopItems) {
     const item = require(`./shop/${_item}`);
     client.shop.set(item.id, item);
+    if(item.category == "Ships" && item.attack || !item.defense) throw new TypeError("Ships should only have a defense value.")
     if(!client.shopCategories.has(item.category)) client.shopCategories.set(item.category, item.category);
 }
 
