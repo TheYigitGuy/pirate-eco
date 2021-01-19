@@ -15,7 +15,7 @@ module.exports = {
             .setTitle(`Shop Category: ${category}`)
             client.shop.forEach(item => {
                 if(item.category === category) {
-                placeholder.addField(item.name, `\n${item.description}\n Price: ${item.price}\n ID: ${item.id}`)
+                placeholder.addField(item.name, `\n${piratish.translate(item.description)}\n Price: ${item.price}\n ID: ${item.id}`)
             }
           })
 

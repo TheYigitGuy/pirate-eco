@@ -1,17 +1,20 @@
 const DiscordJS = require("discord.js");
-const {prefix,token} = require("./config.json");
+const {prefix,token,owners} = require("./config.json");
 const client = new DiscordJS.Client();
 const enmap = require("enmap");
 const fs = require("fs");
+const pirateSpeak = require("pirate-speak");
 
 client.commands = new DiscordJS.Collection();
 client.events = new DiscordJS.Collection();
 client.shop = new DiscordJS.Collection();
 client.shopCategories = new DiscordJS.Collection();
+client.commandCategories = new DiscordJS.Collection();
 
 const cmdFiles = fs.readdirSync("./commands/").filter(file => file.endsWith(".js"));
 for(const file of cmdFiles) {
     const command = require(`./commands/${file}`);
+    if(!client.commandCategories.has(command.category)) client.commandCategories.set(command.category, command.category);
     client.commands.set(command.name, command);
 }
 
@@ -19,7 +22,7 @@ const shopItems = fs.readdirSync("./shop/").filter(file => file.endsWith(".js"))
 for(const _item of shopItems) {
     const item = require(`./shop/${_item}`);
     client.shop.set(item.id, item);
-    if(item.category == "Ships" && item.attack || !item.defense) throw new TypeError("Ships should only have a defense value.")
+    if(item.category == "Ships" && (item.attack || !item.defense)) throw new TypeError("Ships should only have a defense value.")
     if(!client.shopCategories.has(item.category)) client.shopCategories.set(item.category, item.category);
 }
 
@@ -59,6 +62,8 @@ client.on("message", async message => {
     || client.commands.find(c => c.aliases && c.aliases.includes(command));
 
     if(!cmd) return;
+
+    if(cmd.ownersOnly && !owners.includes(message.author.id)) return message.reply(pirateSpeak.translate("You can't do that."))
 
     try {cmd.run(message,args,client,eco,cooldowns)}
     catch(err) {console.error(err)}

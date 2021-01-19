@@ -7,6 +7,7 @@ module.exports = {
     aliases: ["balance", "bal", "myloot"],
     category: "Economy",
     run: async(message,args,client,db,cooldownDB) => {
+        await db.ensure(`${message.author.id}-bal`, 0)
         const userBal = await db.get(`${message.author.id}-bal`);
 
         const lootEmbed = new MessageEmbed()
