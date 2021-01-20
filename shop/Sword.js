@@ -4,5 +4,6 @@ module.exports = {
     id: "sword",
     price: 0,
     attack: 1,
-    category: "Swords"
+    category: "Swords",
+    infinite: false
 }

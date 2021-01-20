@@ -4,5 +4,6 @@ module.exports = {
     id: "sailboat",
     price: 0,
     defense: 1,
-    category: "Ships"
+    category: "Ships",
+    infinite: true
 }
